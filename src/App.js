@@ -4,25 +4,25 @@ import api from "./services/api";
 import "./styles.css";
 
 function App() {
-  const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState([]); //utilização do useState para variáveis se estado
 
   useEffect(() => {api.get('/repositories').then(response => setRepositories(response.data))},[])
-  console.log(repositories)
+  console.log(repositories) //useEffect para disparar a função api.get
 
-  async function handleAddRepository() {
-    const response = await api.post('/repositories',{title: `Adicionar ${Date.now()}`})
-    setRepositories([...repositories,response.data])
+  async function handleAddRepository() { //para adicionar um novo repositório
+    const response = await api.post('/repositories',{title: `Adicionar ${Date.now()}`}) 
+    setRepositories([...repositories,response.data])//respeitar o conceito de imutabilidade
   }
 
-  async function handleRemoveRepository(id) {
-    await api.delete(`/repositories/${id}`)
-    const index = repositories.findIndex(item => item.id === id)
-    if(index > -1){
-      repositories.splice(index,1)
-      setRepositories([...repositories])
+  async function handleRemoveRepository(id) { //remover um repositório
+    await api.delete(`/repositories/${id}`) //primeiro removo do backend
+    const index = repositories.findIndex(item => item.id === id) //procuro o repositório dentro do array no frontend
+    if(index > -1){ //verifico se ele existo 
+      repositories.splice(index,1) //apago do repositorio
+      setRepositories([...repositories])//crio um novo array
     }
   }
-  function render(){
+  function render(){ //função para renderizar um codigo em html
     return (
       repositories.map(item => (<li key={item.id}>
         {item.title} 
